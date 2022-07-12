@@ -1,27 +1,36 @@
-import NotificationButton from '../NotificationButton'
-import './styles.css'
+import NotificationButton from '../NotificationButton';
+import './styles.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useState } from 'react';
 
 function SalesCard() {
+    const max = new Date();
+    const min = new Date(new Date().setDate(new Date().getDate() - 365)); //min da data 1 ano atrás
+
+    const [minDate, setMinDate] = useState(min);
+    const [maxDate, setMaxDate] = useState(max);
+// declarando o dado e a função que muda o dado. o useState vai receber arg de data
+
     return (
         <div className="dsmeta-card">
             <h2 className="dsmeta-sales-title">Vendas</h2>
             <div>
                 <div className="dsmeta-form-control-container">
-                    {/* vamos trocar o input pelo componente datepicker */}
-                    {/* <input className="dsmeta-form-control" type="text" /> */}
+                    {/* o datepicker precisa de uns tweaks pra poder alterar o dado de data no componente */}
+                    {/* a forma correta de manter um estado dentro do componente é usando o React Hook useState */}
+                    {/*  vem antes do return */}
                     <DatePicker
-                        selected={new Date()}
-                        onChange={(date: Date) => { }}
+                        selected={minDate}
+                        onChange={(date: Date) => { setMinDate(date)}} //pra mudar a data chamamos setmin/setmax passando a data que tá referenciada ali
                         className="dsmeta-form-control"
                         dateFormat="dd/MM/yyyy"
                     />
                 </div>
                 <div className="dsmeta-form-control-container">
                     <DatePicker
-                        selected={new Date()}
-                        onChange={(date: Date) => { }}
+                        selected={maxDate}
+                        onChange={(date: Date) => { setMaxDate(date)}}
                         className="dsmeta-form-control"
                         dateFormat="dd/MM/yyyy"
                     />
@@ -90,4 +99,4 @@ function SalesCard() {
     )
 }
 
-export default SalesCard
+export default SalesCard;
