@@ -19,13 +19,19 @@ function SalesCard() {
 
 
     useEffect(() => {
-        //console.log("TESTING");
-        axios.get(`${BASE_URL}/sales`)
+        
+        //tratando as datas como argumento
+        const dmin = minDate.toISOString().slice(0, 10);
+        const dmax = maxDate.toISOString().slice(0, 10);
+                
+        console.log(dmin);
+
+        axios.get(`${BASE_URL}/sales?minDate=${dmin}&maxDate=${dmax}`)
             .then(response => {
                 setSales(response.data.content);
                 //essa é a famosa promise.
-            })
-    }, []) //arg função e lista de dependencias
+            });
+    }, [minDate, maxDate]); //arg função e lista de dependencias - formata a lista quando muda o min e o max
     //esse é o front fazendo requisição no back
 
     return (
