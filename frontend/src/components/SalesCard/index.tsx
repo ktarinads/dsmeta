@@ -4,6 +4,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BASE_URL } from '../../utils/request';
+import { Sale } from '../../models/sale';
 
 function SalesCard() {
     const max = new Date();
@@ -11,14 +13,16 @@ function SalesCard() {
 
     const [minDate, setMinDate] = useState(min);
     const [maxDate, setMaxDate] = useState(max);
-// declarando o dado e a função que muda o dado. o useState vai receber arg de data
+    // declarando o dado e a função que muda o dado. o useState vai receber arg de data
+
+    const [sales, setSales] = useState<Sale[]>([]); //setando um useState pra lista de vendas
 
 
     useEffect(() => {
         //console.log("TESTING");
-        axios.get("http://localhost:8080/sales")
+        axios.get(`${BASE_URL}/sales`)
             .then(response => {
-                console.log(response.data);
+                setSales(response.data.content);
                 //essa é a famosa promise.
             })
     }, []) //arg função e lista de dependencias
@@ -34,7 +38,7 @@ function SalesCard() {
                     {/*  vem antes do return */}
                     <DatePicker
                         selected={minDate}
-                        onChange={(date: Date) => { setMinDate(date)}} //pra mudar a data chamamos setmin/setmax passando a data que tá referenciada ali
+                        onChange={(date: Date) => { setMinDate(date) }} //pra mudar a data chamamos setmin/setmax passando a data que tá referenciada ali
                         className="dsmeta-form-control"
                         dateFormat="dd/MM/yyyy"
                     />
@@ -42,7 +46,7 @@ function SalesCard() {
                 <div className="dsmeta-form-control-container">
                     <DatePicker
                         selected={maxDate}
-                        onChange={(date: Date) => { setMaxDate(date)}}
+                        onChange={(date: Date) => { setMaxDate(date) }}
                         className="dsmeta-form-control"
                         dateFormat="dd/MM/yyyy"
                     />
@@ -63,45 +67,24 @@ function SalesCard() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td className="show992">#341</td>
-                            <td className="show576">08/07/2022</td>
-                            <td>Anakin</td>
-                            <td className="show992">15</td>
-                            <td className="show992">11</td>
-                            <td>R$ 55300.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">#341</td>
-                            <td className="show576">08/07/2022</td>
-                            <td>Anakin</td>
-                            <td className="show992">15</td>
-                            <td className="show992">11</td>
-                            <td>R$ 55300.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="show992">#341</td>
-                            <td className="show576">08/07/2022</td>
-                            <td>Anakin</td>
-                            <td className="show992">15</td>
-                            <td className="show992">11</td>
-                            <td>R$ 55300.00</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
+                        {
+                            sales.map(sale => {
+                                return (
+                                    <tr key={sale.id}>
+                                        <td className="show992">{sale.id}</td>
+                                        <td className="show576">{new Date(sale.date).toLocaleDateString()}</td>
+                                        <td>{sale.sellerName}</td>
+                                        <td className="show992">{sale.visited}</td>
+                                        <td className="show992">{sale.deals}</td>
+                                        <td>R$ {sale.amount.toFixed(2)}</td>
+                                        <td>
+                                            <div className="dsmeta-red-btn-container">
+                                                <NotificationButton />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                     </tbody>
 
                 </table>
