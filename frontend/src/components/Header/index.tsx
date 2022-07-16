@@ -5,7 +5,7 @@ function Header() {
         <>
             <header>
                 <div className="dsmeta-logo-container">
-                    <img src="/src/assets/img/logo.svg" alt="DSMeta" />
+                    <img src="../../../src/assets/img/logo.svg" alt="DSMeta" />
                     <h1>DSMeta</h1>
                     <p>
                         Desenvolvido por
