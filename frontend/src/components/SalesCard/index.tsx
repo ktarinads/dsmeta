@@ -2,7 +2,8 @@ import NotificationButton from '../NotificationButton';
 import './styles.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function SalesCard() {
     const max = new Date();
@@ -11,6 +12,17 @@ function SalesCard() {
     const [minDate, setMinDate] = useState(min);
     const [maxDate, setMaxDate] = useState(max);
 // declarando o dado e a função que muda o dado. o useState vai receber arg de data
+
+
+    useEffect(() => {
+        //console.log("TESTING");
+        axios.get("http://localhost:8080/sales")
+            .then(response => {
+                console.log(response.data);
+                //essa é a famosa promise.
+            })
+    }, []) //arg função e lista de dependencias
+    //esse é o front fazendo requisição no back
 
     return (
         <div className="dsmeta-card">
